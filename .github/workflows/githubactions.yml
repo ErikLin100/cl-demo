@@ -5,17 +5,31 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.x'
+          # Optional - x64 or x86 architecture, defaults to x64
+          architecture: 'x64'
+          
+      - name: instal coverage
+        run: |
+          pip install coverage
+          
       - name: Test with pytest
         run: |
           pytest
+      
+      - name: run coverage
+        run: |
+          coverage run -m pytest arg1 arg2 arg3
+      - name: coverage report
+        run: |
+          coverage report -m
+          
+          
